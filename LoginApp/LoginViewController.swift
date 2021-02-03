@@ -15,13 +15,9 @@ class LoginViewController: UIViewController {
     let userName = "User"
     let password = "Password"
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view.
-    }
-    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.view.endEditing(true)}
+        super.view.endEditing(true)
+    }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         guard let welcomeVC = segue.destination as? WelcomeViewController else { return }
@@ -54,16 +50,22 @@ class LoginViewController: UIViewController {
 
 extension LoginViewController {
     private func showAlertForgotData(with title: String, and message: String) {
-        let alert = UIAlertController(title: title,
-                                      message: message, preferredStyle: .alert)
+        let alert = UIAlertController(
+            title: title,
+            message: message,
+            preferredStyle: .alert
+        )
         let okAction = UIAlertAction(title: "OK", style: .default)
         alert.addAction(okAction)
         present(alert, animated: true)
     }
     
     private func showAlertWrongData(with title: String, and message: String) {
-        let alert = UIAlertController(title: title,
-                                      message: message, preferredStyle: .alert)
+        let alert = UIAlertController(
+            title: title,
+            message: message,
+            preferredStyle: .alert
+        )
         let okAction = UIAlertAction(title: "OK", style: .default) { _ in
             self.passwordTextField.text = ""
         }
