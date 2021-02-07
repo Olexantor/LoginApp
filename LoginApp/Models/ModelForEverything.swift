@@ -5,14 +5,29 @@
 //  Created by Александр on 07.02.2021.
 //
 
-struct User {
-    let username = "User"
-    let password = "Password"
-    let person: Person
+struct Person {
+    let name: String
+    let surname: String
+    let patronymic: String
 }
 
-struct Person {
-    let name = "Александр"
-    let surname = "Николаев"
-    let patronymic = "Александрович"
+struct User {
+    let userName: String
+    let password: String
+    var person: Person
 }
+
+extension User {
+    static func getInfo() -> User {
+        User(
+            userName: "User",
+            password: "Password",
+            person: Person(
+                name: "Александр",
+                surname: "Николаев",
+                patronymic: "Александрович"
+            )
+        )
+    }
+}
+
