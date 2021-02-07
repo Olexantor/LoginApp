@@ -8,68 +8,80 @@
 import UIKit
 
 class LoginViewController: UIViewController {
-
+    
+    //MARK: - IB Outlets
     @IBOutlet var userNameTextField: UITextField!
     @IBOutlet var passwordTextField: UITextField!
     
-    let userName = "User"
-    let password = "Password"
+    //MARK: - Private Properties
+    private let userName = "User"
+    private let password = "Password"
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.view.endEditing(true)
-    }
-    
+    //MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         guard let welcomeVC = segue.destination as? WelcomeViewController else { return }
-        welcomeVC.login = userNameTextField.text
+        welcomeVC.login = userName
+    }
+    
+    //MARK: - IB Actions
+    @IBAction func logInButtonPressed() {
+        if userNameTextField.text == userName && passwordTextField.text == password {
+            performSegue(withIdentifier: "logInSegue", sender: nil)
+        } else {
+            showAlert(
+                title: "Invalid login or password",
+                message: "Please, enter correct login and password",
+                textField: passwordTextField)
+        }
+    }
+    
+    @IBAction func forgotNameButtonPressed() {
+        showAlert(title: "Oops!", message: "Your name is \(userName)😏")
+    }
+    
+    @IBAction func forgotPassButtonPressed() {
+        showAlert(title: "Oops!", message: "Your password is \(password )😏")
     }
     
     @IBAction func unwindSegue(segue: UIStoryboardSegue) {
         userNameTextField.text = ""
         passwordTextField.text = ""
     }
-    
-    @IBAction func logInButtonPressed() {
-        if userNameTextField.text == userName && passwordTextField.text == password {
-            performSegue(withIdentifier: "logInSegue", sender: nil)
-        } else {
-            showAlertWrongData(with: "Invalid login or password",
-                               and: "Please, enter correct login and password")
-        }
-    }
-    
-    @IBAction func forgotNameButtonPressed() {
-        showAlertForgotData(with: "Oops!", and: "Your name is \(userName)😏")
-    }
-    
-    @IBAction func forgotPassButtonPressed() {
-        showAlertForgotData(with: "Oops!",
-                            and: "Your password is \(password )😏")
-    }
 }
 
+// MARK: - Alert Controller
 extension LoginViewController {
-    private func showAlertForgotData(with title: String, and message: String) {
-        let alert = UIAlertController(
-            title: title,
-            message: message,
-            preferredStyle: .alert
-        )
-        let okAction = UIAlertAction(title: "OK", style: .default)
-        alert.addAction(okAction)
-        present(alert, animated: true)
-    }
-    
-    private func showAlertWrongData(with title: String, and message: String) {
+    private func showAlert(
+        title: String,
+        message: String,
+        textField: UITextField? = nil
+    ) {
         let alert = UIAlertController(
             title: title,
             message: message,
             preferredStyle: .alert
         )
         let okAction = UIAlertAction(title: "OK", style: .default) { _ in
-            self.passwordTextField.text = ""
+            textField?.text = nil
         }
         alert.addAction(okAction)
         present(alert, animated: true)
+    }
+}
+
+// MARK: - Work with keyboard
+extension LoginViewController: UITextFieldDelegate {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        view.endEditing(true)
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if textField == userNameTextField {
+            passwordTextField.becomeFirstResponder()
+        } else {
+            logInButtonPressed()
+        }
+        return true
     }
 }
